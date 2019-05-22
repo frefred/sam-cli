@@ -66,7 +66,7 @@ Resources:
     Properties:
       Role: !GetAtt LambdaIAMRole.Arn
       CodeUri: .
-      Handler: api/product/list.lambda_handler
+      Handler: api/products/list.lambda_handler
       Runtime: python3.6
       Events:
         ProductList:
@@ -79,20 +79,20 @@ Resources:
     Properties:
       Role: !GetAtt LambdaIAMRole.Arn
       CodeUri: .
-      Handler: api/product/get.lambda_handler
+      Handler: api/products/get.lambda_handler
       Runtime: python3.6
       Events:
         ProductGet:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /product
+            Path: /products/{product}
             Method: get
   ProductPostFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       Role: !GetAtt LambdaIAMRole.Arn
       CodeUri: .
-      Handler: api/product/post.lambda_handler
+      Handler: api/products/post.lambda_handler
       Runtime: python3.6
       Environment:
         Variables:
@@ -101,31 +101,31 @@ Resources:
         ProductPost:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /product
+            Path: /products
             Method: post
   ProductPutFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: .
-      Handler: api/product/put.lambda_handler
+      Handler: api/products/put.lambda_handler
       Runtime: python3.6
       Events:
         ProductGet:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /product
+            Path: /products/{product}
             Method: put
   ProductDeleteFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: .
-      Handler: api/product/delete.lambda_handler
+      Handler: api/products/delete.lambda_handler
       Runtime: python3.6
       Events:
         ProductGet:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /product
+            Path: /products/{product}
             Method: delete
 
 Outputs:
