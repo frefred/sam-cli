@@ -1,39 +1,30 @@
 import json
+import boto3
 
-# import requests
-
+# log error in CloudWatch
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
+    try:
 
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
+        dynamodb = boto3.resource('dynamodb')
+        productTable = dynamodb.Table( 'product' )
 
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+        productID = event[ 'pathParameters' ][ 'product' ]
+        productName = event[ 'queryStringParameters' ][ 'name' ]
 
-    context: object, required
-        Lambda Context runtime methods and attributes
+        if not productID:
+            raise Exception( 'productId is empty' )
+        if not productName:
+            raise Exception( 'productName is empty' )
 
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
+        productTable.update_item( Key={'id': productID}, AttributeUpdates={ 'name': { 'Value' : productName } } )
 
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
-
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
-
-    return {
-        "statusCode": 200,
-        "body": json.dumps( "put" ),
-    }
+        return {
+            "statusCode": 200,
+            "body": json.dumps( "put" ),
+        }
+    except:
+        return {
+            "statusCode": 406,
+            "body": json.dumps( 0 ),
+        }

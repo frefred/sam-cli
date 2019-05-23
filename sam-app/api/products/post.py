@@ -1,8 +1,5 @@
 import json
-import os
 import boto3
-
-# import requests
 
 # handle log via cloudwatch ?
 
@@ -14,6 +11,9 @@ def lambda_handler(event, context):
 
         try:
             productName = event[ 'queryStringParameters' ][ 'name' ]
+
+            if not productName:
+                raise Exception( 'productName is empty ' )
 
             productTable.put_item(
                 Item={
